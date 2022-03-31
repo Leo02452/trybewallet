@@ -17,7 +17,7 @@ const requestFailure = (error) => ({
   error,
 });
 
-export default getCoinPrice = () => async () => {
+export const getCoinPrice = (dispatch) => async () => {
   dispatch(startRequest());
   try {
     const coinInfo = await fetch('https://economia.awesomeapi.com.br/json/all');
@@ -26,3 +26,8 @@ export default getCoinPrice = () => async () => {
     dispatch(requestFailure(error));
   }
 };
+
+export const dispatchUser = (email) => ({
+  type: 'ADD_USER',
+  email,
+});

@@ -5,12 +5,10 @@ import {
   RECEIVE_REQUEST_FAILURE } from '../actions';
 
 const INITIAL_STATE = {
-  wallet: {
-    currencies: [],
-    expenses: [],
-    isFetching: false,
-    error: '',
-  },
+  currencies: [],
+  expenses: [],
+  isFetching: false,
+  error: '',
 };
 
 function wallet(state = INITIAL_STATE, action) {
@@ -23,12 +21,15 @@ function wallet(state = INITIAL_STATE, action) {
   case RECEIVE_REQUEST_SUCCESS:
     return ({
       ...state,
-      wallet: { isFetching: false, currencies: action.data },
+      isFetching: false,
+      currencies: [...state.currencies, ...Object.keys(action.data)]
+        .filter((coin) => coin !== 'USDT'),
     });
   case RECEIVE_REQUEST_FAILURE:
     return ({
       ...state,
-      wallet: { isFetching: false, error: action.error },
+      isFetching: false,
+      error: action.error,
     });
   default:
     return state;

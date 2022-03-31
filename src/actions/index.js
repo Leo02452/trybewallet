@@ -17,11 +17,12 @@ const requestFailure = (error) => ({
   error,
 });
 
-export const getCoinPrice = (dispatch) => async () => {
+export const getCoinPrice = () => async (dispatch) => {
   dispatch(startRequest());
   try {
     const coinInfo = await fetch('https://economia.awesomeapi.com.br/json/all');
-    dispatch(requestSuccess(coinInfo));
+    const result = await coinInfo.json();
+    dispatch(requestSuccess(result));
   } catch (error) {
     dispatch(requestFailure(error));
   }

@@ -32,3 +32,8 @@ export const dispatchUser = (email) => ({
   type: 'ADD_USER',
   email,
 });
+
+export const dispatchExpense = (expense) => ({
+  type: 'ADD_EXPENSE',
+  expense,
+});

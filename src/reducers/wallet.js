@@ -16,7 +16,7 @@ function wallet(state = INITIAL_STATE, action) {
   case START_REQUEST:
     return ({
       ...state,
-      wallet: { isFetching: true },
+      isFetching: true,
     });
   case RECEIVE_REQUEST_SUCCESS:
     return ({
@@ -30,6 +30,12 @@ function wallet(state = INITIAL_STATE, action) {
       ...state,
       isFetching: false,
       error: action.error,
+    });
+  case 'ADD_EXPENSE':
+    return ({
+      ...state,
+      isFetching: false,
+      expenses: [...state.expenses, action.expense],
     });
   default:
     return state;

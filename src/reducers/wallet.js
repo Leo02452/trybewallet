@@ -2,7 +2,9 @@
 import {
   START_REQUEST,
   RECEIVE_REQUEST_SUCCESS,
-  RECEIVE_REQUEST_FAILURE } from '../actions';
+  RECEIVE_REQUEST_FAILURE,
+  ADD_EXPENSE,
+  DELETE_EXPENSE } from '../actions';
 
 const INITIAL_STATE = {
   currencies: [],
@@ -31,11 +33,17 @@ function wallet(state = INITIAL_STATE, action) {
       isFetching: false,
       error: action.error,
     });
-  case 'ADD_EXPENSE':
+  case ADD_EXPENSE:
     return ({
       ...state,
       isFetching: false,
       expenses: [...state.expenses, action.expense],
+    });
+  case DELETE_EXPENSE:
+    return ({
+      ...state,
+      isFetching: false,
+      expenses: [...action.expense],
     });
   default:
     return state;

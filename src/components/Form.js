@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
-import { dispatchExpense } from '../actions';
+import { addExpense } from '../actions';
 
 const Alimentação = 'Alimentação';
 
@@ -26,7 +26,7 @@ class Form extends Component {
 
   handleClick = async (event) => {
     event.preventDefault();
-    const { expenses } = this.props;
+    const { updateExpenses } = this.props;
     const response = await fetch('https://economia.awesomeapi.com.br/json/all');
     const data = await response.json();
     this.setState((previousState) => ({
@@ -36,7 +36,7 @@ class Form extends Component {
         ...data,
       },
     }), () => {
-      expenses({ ...this.state });
+      updateExpenses({ ...this.state });
       this.setState({
         value: '0',
         description: '',
@@ -127,7 +127,7 @@ class Form extends Component {
 
 Form.propTypes = {
   currencies: PropTypes.arrayOf(PropTypes.string).isRequired,
-  expenses: PropTypes.func.isRequired,
+  updateExpenses: PropTypes.func.isRequired,
 };
 
 const mapStateToProps = (state) => ({
@@ -135,7 +135,7 @@ const mapStateToProps = (state) => ({
 });
 
 const mapDispatchToProps = (dispatch) => ({
-  expenses: (expense) => dispatch(dispatchExpense(expense)),
+  updateExpenses: (expense) => dispatch(addExpense(expense)),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(Form);

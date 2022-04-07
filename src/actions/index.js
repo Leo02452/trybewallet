@@ -2,6 +2,9 @@
 export const START_REQUEST = 'START_REQUEST';
 export const RECEIVE_REQUEST_SUCCESS = 'RECEIVE_REQUEST_SUCCESS';
 export const RECEIVE_REQUEST_FAILURE = 'RECEIVE_REQUEST_FAILURE';
+export const ADD_USER = 'ADD_USER';
+export const ADD_EXPENSE = 'ADD_EXPENSE';
+export const DELETE_EXPENSE = 'DELETE_EXPENSE';
 
 const startRequest = () => ({
   type: START_REQUEST,
@@ -29,11 +32,16 @@ export const getCoinPrice = () => async (dispatch) => {
 };
 
 export const dispatchUser = (email) => ({
-  type: 'ADD_USER',
+  type: ADD_USER,
   email,
 });
 
-export const dispatchExpense = (expense) => ({
-  type: 'ADD_EXPENSE',
+export const addExpense = (expense) => ({
+  type: ADD_EXPENSE,
+  expense,
+});
+
+export const deleteExpense = (expense) => ({
+  type: DELETE_EXPENSE,
   expense,
 });

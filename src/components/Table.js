@@ -1,13 +1,19 @@
 import PropTypes from 'prop-types';
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { deleteExpense } from '../actions';
+import { deleteExpense, editModeOn } from '../actions';
 
 class Table extends Component {
-  handleClick = ({ target }) => {
-    const { expenses, updateExpenses } = this.props;
+  handleDelete = ({ target }) => {
+    const { expenses, dispatchDeleteExpenses } = this.props;
     const newArray = expenses.filter((element) => element.id !== +target.value);
-    updateExpenses(newArray);
+    dispatchDeleteExpenses(newArray);
+  }
+
+  handleEdit = ({ target }) => {
+    const { expenses, dispatchEditModeOn } = this.props;
+    const expense = expenses.filter((element) => element.id === +target.value);
+    dispatchEditModeOn(...expense);
   }
 
   render() {
@@ -38,14 +44,22 @@ class Table extends Component {
               <td>{ Number(expense.exchangeRates[expense.currency].ask).toFixed(2) }</td>
               <td>
                 { (Number(expense.value)
-                * Number(expense.exchangeRates[expense.currency].ask)).toFixed(2) }
+                  * Number(expense.exchangeRates[expense.currency].ask)).toFixed(2) }
               </td>
               <td>Real</td>
               <td>
                 <button
                   type="button"
+                  data-testid="edit-btn"
+                  onClick={ this.handleEdit }
+                  value={ expense.id }
+                >
+                  Editar
+                </button>
+                <button
+                  type="button"
                   data-testid="delete-btn"
-                  onClick={ this.handleClick }
+                  onClick={ this.handleDelete }
                   value={ expense.id }
                 >
                   Excluir
@@ -61,7 +75,9 @@ class Table extends Component {
 
 Table.propTypes = {
   expenses: PropTypes.arrayOf(PropTypes.any).isRequired,
-  updateExpenses: PropTypes.func.isRequired,
+  dispatchDeleteExpenses: PropTypes.func.isRequired,
+  // dispatchEditExpenses: PropTypes.func.isRequired,
+  dispatchEditModeOn: PropTypes.func.isRequired,
 };
 
 const mapStateToProps = (state) => ({
@@ -69,7 +85,9 @@ const mapStateToProps = (state) => ({
 });
 
 const mapDispatchToProps = (dispatch) => ({
-  updateExpenses: (expense) => dispatch(deleteExpense(expense)),
+  dispatchDeleteExpenses: (expense) => dispatch(deleteExpense(expense)),
+  // dispatchEditExpenses: (expense) => dispatch(editExpense(expense)),
+  dispatchEditModeOn: (expense) => dispatch(editModeOn(expense)),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(Table);

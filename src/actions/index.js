@@ -5,6 +5,10 @@ export const RECEIVE_REQUEST_FAILURE = 'RECEIVE_REQUEST_FAILURE';
 export const ADD_USER = 'ADD_USER';
 export const ADD_EXPENSE = 'ADD_EXPENSE';
 export const DELETE_EXPENSE = 'DELETE_EXPENSE';
+export const EDIT_EXPENSE = 'EDIT_EXPENSE';
+export const EDIT_MODEON = 'EDIT_MODEON';
+export const EDIT_MODEOFF = 'EDIT_MODEOFF';
+export const EXPENSE_TO_EDIT = 'EXPENSE_TO_EDIT';
 
 const startRequest = () => ({
   type: START_REQUEST,
@@ -45,3 +49,23 @@ export const deleteExpense = (expense) => ({
   type: DELETE_EXPENSE,
   expense,
 });
+
+export const editExpense = (expense) => ({
+  type: EDIT_EXPENSE,
+  expense,
+});
+
+export const editModeOn = (expense) => ({
+  type: EDIT_MODEON,
+  expense,
+});
+
+export const editModeOff = (editedExpenses) => ({
+  type: EDIT_MODEOFF,
+  editedExpenses,
+});
+
+// export const expenseToEdit = (expense) => ({
+//   type: EXPENSE_TO_EDIT,
+//   expense,
+// });

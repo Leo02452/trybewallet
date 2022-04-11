@@ -4,7 +4,12 @@ import {
   RECEIVE_REQUEST_SUCCESS,
   RECEIVE_REQUEST_FAILURE,
   ADD_EXPENSE,
-  DELETE_EXPENSE } from '../actions';
+  DELETE_EXPENSE,
+  EDIT_EXPENSE,
+  EDIT_MODEON,
+  EDIT_MODEOFF,
+  // EXPENSE_TO_EDIT,
+} from '../actions';
 
 const INITIAL_STATE = {
   currencies: [],
@@ -36,15 +41,31 @@ function wallet(state = INITIAL_STATE, action) {
   case ADD_EXPENSE:
     return ({
       ...state,
-      isFetching: false,
       expenses: [...state.expenses, action.expense],
     });
   case DELETE_EXPENSE:
+  case EDIT_EXPENSE:
     return ({
       ...state,
-      isFetching: false,
       expenses: [...action.expense],
     });
+  case EDIT_MODEON:
+    return ({
+      ...state,
+      editMode: true,
+      expenseToEdit: action.expense,
+    });
+  case EDIT_MODEOFF:
+    return ({
+      ...state,
+      editMode: false,
+      expenses: action.editedExpenses,
+    });
+  // case EXPENSE_TO_EDIT:
+  //   return ({
+  //     ...state,
+  //     expenseToEdit: action.expense,
+  //   });
   default:
     return state;
   }

@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
-import { addExpense } from '../actions';
+import { addExpense, editModeOff } from '../actions';
 
 const Alimentação = 'Alimentação';
 
@@ -19,37 +19,82 @@ class Form extends Component {
     };
   }
 
+  componentDidUpdate(prevProps) {
+    this.editExpense(prevProps);
+  }
+
+  editExpense = (prevProps) => {
+    const { editMode } = this.props;
+    if (prevProps.editMode !== editMode) {
+      const { expenseToEdit } = this.props;
+      this.setState({
+        id: expenseToEdit.id,
+        value: expenseToEdit.value,
+        description: expenseToEdit.description,
+        currency: expenseToEdit.currency,
+        method: expenseToEdit.method,
+        tag: expenseToEdit.tag,
+        exchangeRates: expenseToEdit.exchangeRates,
+      });
+    }
+  }
+
   handleChange = ({ target }) => {
     const { name, value } = target;
     this.setState({ [name]: value });
   }
 
   handleClick = async (event) => {
+    const { target: { name } } = event;
     event.preventDefault();
-    const { updateExpenses } = this.props;
-    const response = await fetch('https://economia.awesomeapi.com.br/json/all');
-    const data = await response.json();
-    this.setState((previousState) => ({
-      id: previousState.id === '' ? 0 : previousState.id + 1,
-      exchangeRates: {
-        ...previousState.exchangeRates,
-        ...data,
-      },
-    }), () => {
-      updateExpenses({ ...this.state });
-      this.setState({
-        value: '0',
-        description: '',
-        currency: 'USD',
-        method: 'Dinheiro',
-        tag: 'Alimentação',
-        exchangeRates: {},
+    if (name === 'add-button') {
+      const response = await fetch('https://economia.awesomeapi.com.br/json/all');
+      const data = await response.json();
+      this.setState((previousState) => ({
+        id: previousState.id === '' ? 0 : previousState.id + 1,
+        exchangeRates: {
+          ...previousState.exchangeRates,
+          ...data,
+        },
+      }));
+      const { dispatchNewExpense } = this.props;
+      dispatchNewExpense({ ...this.state });
+    } else if (name === 'edit-button') {
+      const { dispatchEditModeOff, expenses } = this.props;
+      const { id,
+        value,
+        description,
+        currency,
+        method,
+        tag,
+        exchangeRates } = this.state;
+      const editedExpenses = expenses.map((expense) => {
+        if (expense.id === id) {
+          expense.id = id;
+          expense.value = value;
+          expense.description = description;
+          expense.currency = currency;
+          expense.method = method;
+          expense.tag = tag;
+          expense.exchangeRates = exchangeRates;
+          return expense;
+        }
+        return expense;
       });
+      dispatchEditModeOff(editedExpenses);
+    }
+    this.setState({
+      value: '0',
+      description: '',
+      currency: 'USD',
+      method: 'Dinheiro',
+      tag: 'Alimentação',
+      exchangeRates: {},
     });
   }
 
   render() {
-    const { currencies } = this.props;
+    const { currencies, editMode } = this.props;
     const { value,
       description,
     } = this.state;
@@ -117,25 +162,39 @@ class Form extends Component {
         <button
           type="submit"
           onClick={ this.handleClick }
+          name={ editMode ? 'edit-button' : 'add-button' }
         >
-          Adicionar despesa
+          { editMode ? 'Editar despesa' : 'Adicionar despesa'}
         </button>
       </form>
     );
   }
 }
 
+Form.defaultProps = {
+  editMode: false,
+  expenseToEdit: {},
+};
+
 Form.propTypes = {
   currencies: PropTypes.arrayOf(PropTypes.string).isRequired,
-  updateExpenses: PropTypes.func.isRequired,
+  dispatchNewExpense: PropTypes.func.isRequired,
+  editMode: PropTypes.bool,
+  dispatchEditModeOff: PropTypes.func.isRequired,
+  expenseToEdit: PropTypes.objectOf(PropTypes.any),
+  expenses: PropTypes.arrayOf(PropTypes.string).isRequired,
 };
 
 const mapStateToProps = (state) => ({
   currencies: state.wallet.currencies,
+  editMode: state.wallet.editMode,
+  expenseToEdit: state.wallet.expenseToEdit,
+  expenses: state.wallet.expenses,
 });
 
 const mapDispatchToProps = (dispatch) => ({
-  updateExpenses: (expense) => dispatch(addExpense(expense)),
+  dispatchNewExpense: (expense) => dispatch(addExpense(expense)),
+  dispatchEditModeOff: (editedExpenses) => dispatch(editModeOff(editedExpenses)),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(Form);

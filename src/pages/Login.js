@@ -1,10 +1,10 @@
-import React from 'react';
+import React, { Component } from 'react';
 import { Redirect } from 'react-router-dom';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
-import { dispatchUser } from '../actions/index';
+import { addUser } from '../actions/index';
 
-class Login extends React.Component {
+class Login extends Component {
   constructor() {
     super();
     this.state = {
@@ -34,9 +34,9 @@ class Login extends React.Component {
   }
 
   handleClick = () => {
-    const { saveUser } = this.props;
+    const { dispatchAddUser } = this.props;
     const { email } = this.state;
-    saveUser(email);
+    dispatchAddUser(email);
     this.setState({ redirect: true });
   };
 
@@ -65,18 +65,18 @@ class Login extends React.Component {
         >
           Entrar
         </button>
-        { redirect && <Redirect to="/carteira" />}
+        { redirect && <Redirect to="/carteira" /> }
       </form>
     );
   }
 }
 
 Login.propTypes = {
-  saveUser: PropTypes.func.isRequired,
+  dispatchAddUser: PropTypes.func.isRequired,
 };
 
 const mapDispatchToProps = (dispatch) => ({
-  saveUser: (state) => dispatch(dispatchUser(state)),
+  dispatchAddUser: (state) => dispatch(addUser(state)),
 });
 
 export default connect(null, mapDispatchToProps)(Login);

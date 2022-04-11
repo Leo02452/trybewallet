@@ -1,22 +1,15 @@
-import React from 'react';
+import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import Header from '../components/Header';
 import Form from '../components/Form';
-import { getCoinPrice } from '../actions/index';
+import { fetchCurrenciesInfo } from '../actions/index';
 import Table from '../components/Table';
 
-class Wallet extends React.Component {
-  constructor() {
-    super();
-    this.state = {
-
-    };
-  }
-
+class Wallet extends Component {
   componentDidMount = () => {
-    const { getCoinInfo } = this.props;
-    getCoinInfo();
+    const { dispatchCurrenciesInfo } = this.props;
+    dispatchCurrenciesInfo();
   }
 
   render() {
@@ -31,11 +24,11 @@ class Wallet extends React.Component {
 }
 
 Wallet.propTypes = {
-  getCoinInfo: PropTypes.func.isRequired,
+  dispatchCurrenciesInfo: PropTypes.func.isRequired,
 };
 
 const mapDispatchToProps = (dispatch) => ({
-  getCoinInfo: () => dispatch(getCoinPrice()),
+  dispatchCurrenciesInfo: () => dispatch(fetchCurrenciesInfo()),
 });
 
 export default connect(null, mapDispatchToProps)(Wallet);

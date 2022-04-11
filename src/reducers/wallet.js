@@ -1,14 +1,11 @@
-// Esse reducer será responsável por tratar as informações da pessoa usuária
 import {
   START_REQUEST,
   RECEIVE_REQUEST_SUCCESS,
   RECEIVE_REQUEST_FAILURE,
   ADD_EXPENSE,
   DELETE_EXPENSE,
-  EDIT_EXPENSE,
   EDIT_MODEON,
   EDIT_MODEOFF,
-  // EXPENSE_TO_EDIT,
 } from '../actions';
 
 const INITIAL_STATE = {
@@ -44,7 +41,6 @@ function wallet(state = INITIAL_STATE, action) {
       expenses: [...state.expenses, action.expense],
     });
   case DELETE_EXPENSE:
-  case EDIT_EXPENSE:
     return ({
       ...state,
       expenses: [...action.expense],
@@ -59,13 +55,8 @@ function wallet(state = INITIAL_STATE, action) {
     return ({
       ...state,
       editMode: false,
-      expenses: action.editedExpenses,
+      expenses: [...action.editedExpenses],
     });
-  // case EXPENSE_TO_EDIT:
-  //   return ({
-  //     ...state,
-  //     expenseToEdit: action.expense,
-  //   });
   default:
     return state;
   }

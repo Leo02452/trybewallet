@@ -1,8 +1,8 @@
 import PropTypes from 'prop-types';
-import React from 'react';
+import React, { Component } from 'react';
 import { connect } from 'react-redux';
 
-export class Header extends React.Component {
+export class Header extends Component {
   renderWalletTotal = (array) => array
     .reduce((acc, curr) => {
       const currencyValue = +curr.exchangeRates[curr.currency].ask;

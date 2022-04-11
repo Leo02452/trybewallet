@@ -48,17 +48,17 @@ class Form extends Component {
     const { target: { name } } = event;
     event.preventDefault();
     if (name === 'add-button') {
-      const response = await fetch('https://economia.awesomeapi.com.br/json/all');
-      const data = await response.json();
+      const currenciesInfo = await fetch('https://economia.awesomeapi.com.br/json/all');
+      const dataJson = await currenciesInfo.json();
       this.setState((previousState) => ({
         id: previousState.id === '' ? 0 : previousState.id + 1,
         exchangeRates: {
           ...previousState.exchangeRates,
-          ...data,
+          ...dataJson,
         },
       }));
-      const { dispatchNewExpense } = this.props;
-      dispatchNewExpense({ ...this.state });
+      const { dispatchAddExpense } = this.props;
+      dispatchAddExpense({ ...this.state });
     } else if (name === 'edit-button') {
       const { dispatchEditModeOff, expenses } = this.props;
       const { id,
@@ -178,11 +178,11 @@ Form.defaultProps = {
 
 Form.propTypes = {
   currencies: PropTypes.arrayOf(PropTypes.string).isRequired,
-  dispatchNewExpense: PropTypes.func.isRequired,
+  dispatchAddExpense: PropTypes.func.isRequired,
   editMode: PropTypes.bool,
   dispatchEditModeOff: PropTypes.func.isRequired,
   expenseToEdit: PropTypes.objectOf(PropTypes.any),
-  expenses: PropTypes.arrayOf(PropTypes.string).isRequired,
+  expenses: PropTypes.arrayOf(PropTypes.object).isRequired,
 };
 
 const mapStateToProps = (state) => ({
@@ -193,7 +193,7 @@ const mapStateToProps = (state) => ({
 });
 
 const mapDispatchToProps = (dispatch) => ({
-  dispatchNewExpense: (expense) => dispatch(addExpense(expense)),
+  dispatchAddExpense: (expense) => dispatch(addExpense(expense)),
   dispatchEditModeOff: (editedExpenses) => dispatch(editModeOff(editedExpenses)),
 });
 

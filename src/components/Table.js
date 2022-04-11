@@ -5,9 +5,9 @@ import { deleteExpense, editModeOn } from '../actions';
 
 class Table extends Component {
   handleDelete = ({ target }) => {
-    const { expenses, dispatchDeleteExpenses } = this.props;
+    const { expenses, dispatchDeleteExpense } = this.props;
     const newArray = expenses.filter((element) => element.id !== +target.value);
-    dispatchDeleteExpenses(newArray);
+    dispatchDeleteExpense(newArray);
   }
 
   handleEdit = ({ target }) => {
@@ -75,8 +75,7 @@ class Table extends Component {
 
 Table.propTypes = {
   expenses: PropTypes.arrayOf(PropTypes.any).isRequired,
-  dispatchDeleteExpenses: PropTypes.func.isRequired,
-  // dispatchEditExpenses: PropTypes.func.isRequired,
+  dispatchDeleteExpense: PropTypes.func.isRequired,
   dispatchEditModeOn: PropTypes.func.isRequired,
 };
 
@@ -85,8 +84,7 @@ const mapStateToProps = (state) => ({
 });
 
 const mapDispatchToProps = (dispatch) => ({
-  dispatchDeleteExpenses: (expense) => dispatch(deleteExpense(expense)),
-  // dispatchEditExpenses: (expense) => dispatch(editExpense(expense)),
+  dispatchDeleteExpense: (expense) => dispatch(deleteExpense(expense)),
   dispatchEditModeOn: (expense) => dispatch(editModeOn(expense)),
 });
 
